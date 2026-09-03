@@ -1,0 +1,224 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | EventHub</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎫</text></svg>">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">Event<span>Hub</span><span class="dot">.</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="/">Browse Events</a></li>
+      <li><a href="/admin-dashboard/" style="color:var(--primary-light)">Admin</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="/login/" class="btn btn-outline hidden" id="navLoginBtn">Log In</a>
+      <a href="/register/" class="btn btn-primary hidden" id="navRegisterBtn">Sign Up</a>
+      <div class="nav-user hidden" id="navUserMenu">
+        <span class="nav-user-name" id="navUserName"></span>
+        <a href="/dashboard/" class="btn btn-outline btn-sm">My Tickets</a>
+        <button class="btn btn-danger btn-sm" id="logoutBtn">Logout</button>
+      </div>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<main class="admin-page">
+  <div class="container">
+
+    <!-- ── Header ── -->
+    <div class="dashboard-header">
+      <div>
+        <p style="color:var(--primary-light);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.25rem">Admin Panel</p>
+        <h2>Dashboard 📊</h2>
+      </div>
+      <button class="btn btn-primary" id="createEventBtn">+ Create Event</button>
+    </div>
+
+    <!-- ── Stats Grid ── -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon purple">🎪</div>
+        <div class="stat-card-info">
+          <h3>Total Events</h3>
+          <div class="value" id="statEvents">—</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green">🎫</div>
+        <div class="stat-card-info">
+          <h3>Total Bookings</h3>
+          <div class="value" id="statBookings">—</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon orange">👥</div>
+        <div class="stat-card-info">
+          <h3>Registered Users</h3>
+          <div class="value" id="statUsers">—</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon blue">🎟️</div>
+        <div class="stat-card-info">
+          <h3>Tickets Sold</h3>
+          <div class="value" id="statTickets">—</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon red">💰</div>
+        <div class="stat-card-info">
+          <h3>Revenue</h3>
+          <div class="value" id="statRevenue" style="font-size:1.25rem">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Events Table ── -->
+    <div class="admin-table-wrap">
+      <div class="admin-table-header">
+        <h3>🎪 All Events</h3>
+        <button class="btn btn-primary btn-sm" id="refreshEventsBtn" onclick="loadAdminEvents()">↻ Refresh</button>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Date</th>
+              <th>Location</th>
+              <th>Price</th>
+              <th>Tickets</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="eventsTbody">
+            <tr><td colspan="7"><div class="skeleton" style="height:40px"></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── Recent Bookings Table ── -->
+    <div class="admin-table-wrap">
+      <div class="admin-table-header">
+        <h3>📋 Recent Bookings</h3>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Reference</th>
+              <th>Event</th>
+              <th>Qty</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="recentBookingsTbody">
+            <tr><td colspan="6"><div class="skeleton" style="height:40px"></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /container -->
+</main>
+
+<!-- ── Create/Edit Event Modal ── -->
+<div class="modal-overlay" id="eventModal">
+  <div class="modal" style="max-width:580px;width:100%">
+    <h3 id="eventModalTitle">Create Event</h3>
+    <form id="eventForm" novalidate>
+      <div class="form-row">
+        <div class="form-group" style="grid-column:1/-1">
+          <label>Event Title *</label>
+          <input class="form-control" type="text" id="field_title" placeholder="e.g. Lagos Tech Conference 2026" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Description *</label>
+        <textarea class="form-control" id="field_description" rows="4" placeholder="Describe the event..." style="resize:vertical" required></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Date *</label>
+          <input class="form-control" type="date" id="field_date" required>
+        </div>
+        <div class="form-group">
+          <label>Time *</label>
+          <input class="form-control" type="time" id="field_time" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Location *</label>
+        <input class="form-control" type="text" id="field_location" placeholder="e.g. Eko Convention Centre, Lagos" required>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Category *</label>
+          <select class="form-control" id="field_category" required>
+            <option value="concert">🎵 Concert</option>
+            <option value="technology">💻 Technology</option>
+            <option value="business">💼 Business</option>
+            <option value="sports">⚽ Sports</option>
+            <option value="education">📚 Education</option>
+            <option value="entertainment">🎭 Entertainment</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Price (₦) *</label>
+          <input class="form-control" type="number" id="field_price" placeholder="5000" min="0" step="0.01" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Total Tickets *</label>
+          <input class="form-control" type="number" id="field_total_tickets" placeholder="500" min="1" required>
+        </div>
+        <div class="form-group" style="display:flex;align-items:center;gap:.75rem;padding-top:1.75rem">
+          <input type="checkbox" id="field_is_featured" style="width:18px;height:18px;accent-color:var(--primary)">
+          <label for="field_is_featured" style="margin-bottom:0;cursor:pointer">Featured Event ✨</label>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline" id="closeEventModal">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="saveEventBtn">Save Event</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ── Delete Confirm Modal ── -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal">
+    <h3>Delete Event?</h3>
+    <p style="margin-bottom:1.5rem;color:var(--text-secondary)">
+      This action cannot be undone. All associated bookings may be affected.
+    </p>
+    <div class="modal-actions">
+      <button class="btn btn-outline" id="closeDeleteModal">Cancel</button>
+      <button class="btn btn-danger" id="confirmDeleteBtn">Delete Event</button>
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'js/api.js' %}"></script>
+<script src="{% static 'js/admin.js' %}"></script>
+</body>
+</html>

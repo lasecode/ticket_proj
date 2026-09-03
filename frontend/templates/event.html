@@ -1,0 +1,159 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Details | EventHub</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎫</text></svg>">
+</head>
+<body>
+
+<!-- ── Navbar ── -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">Event<span>Hub</span><span class="dot">.</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="/">Home</a></li>
+      <li><a href="/?upcoming=true">Upcoming</a></li>
+      <li id="navAdminLink" class="hidden"><a href="/admin-dashboard/">Admin</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="/login/" class="btn btn-outline" id="navLoginBtn">Log In</a>
+      <a href="/register/" class="btn btn-primary" id="navRegisterBtn">Sign Up</a>
+      <div class="nav-user hidden" id="navUserMenu">
+        <span class="nav-user-name" id="navUserName"></span>
+        <a href="/dashboard/" class="btn btn-outline btn-sm">My Tickets</a>
+        <button class="btn btn-danger btn-sm" id="logoutBtn">Logout</button>
+      </div>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Event Detail ── -->
+<main class="event-detail">
+  <div class="container">
+    <!-- Back link -->
+    <a href="/" style="display:inline-flex;align-items:center;gap:.4rem;color:var(--text-muted);font-size:.875rem;margin-bottom:1.5rem">
+      ← Back to Events
+    </a>
+
+    <!-- Image -->
+    <div id="eventImageWrap">
+      <div class="event-hero-placeholder cat-entertainment">🎫</div>
+    </div>
+
+    <div class="event-detail-grid">
+
+      <!-- ── Left: Event Info ── -->
+      <div class="event-info">
+        <span id="eventCategory" style="display:inline-block;background:rgba(108,99,255,.15);color:var(--primary-light);font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:.3rem .75rem;border-radius:999px;margin-bottom:.75rem"></span>
+        <h1 id="eventTitle">Loading...</h1>
+        <p id="eventDesc" style="line-height:1.8;margin-bottom:1.5rem"></p>
+
+        <!-- Meta grid -->
+        <div class="event-meta-grid">
+          <div class="meta-card">
+            <div class="icon">📅</div>
+            <div><strong id="eventDate">—</strong><span>Date</span></div>
+          </div>
+          <div class="meta-card">
+            <div class="icon">🕐</div>
+            <div><strong id="eventTime">—</strong><span>Time</span></div>
+          </div>
+          <div class="meta-card">
+            <div class="icon">📍</div>
+            <div><strong id="eventLocation">—</strong><span>Location</span></div>
+          </div>
+          <div class="meta-card">
+            <div class="icon">🎫</div>
+            <div><strong id="eventTickets">—</strong><span>Tickets Remaining</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Right: Booking Card ── -->
+      <div>
+        <div class="booking-card">
+          <div class="price-display" id="bookingPrice">₦0</div>
+          <p style="font-size:.8rem;color:var(--text-muted);margin-bottom:1rem" id="bookingTicketsLeft"></p>
+
+          <div id="bookingForm">
+            <div style="margin-bottom:1rem">
+              <label style="font-size:.85rem;font-weight:600;color:var(--text-secondary);display:block;margin-bottom:.75rem">
+                Number of Tickets
+              </label>
+              <div class="quantity-selector">
+                <button class="quantity-btn" id="qtyMinus">−</button>
+                <span class="quantity-display" id="qtyDisplay">1</span>
+                <button class="quantity-btn" id="qtyPlus">+</button>
+              </div>
+            </div>
+
+            <div class="booking-summary">
+              <div class="row">
+                <span>Price per ticket</span>
+                <span id="ticketPrice">—</span>
+              </div>
+              <div class="row">
+                <span>Quantity</span>
+                <span id="summaryQty">1</span>
+              </div>
+              <div class="row total">
+                <span>Total</span>
+                <span id="summaryTotal">—</span>
+              </div>
+            </div>
+
+            <button class="btn btn-primary btn-full btn-lg" id="bookBtn">Book Tickets</button>
+            <p style="font-size:.75rem;color:var(--text-muted);text-align:center;margin-top:.75rem">
+              Secure booking · Instant confirmation
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /grid -->
+  </div>
+</main>
+
+<!-- ── Success Modal ── -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal" style="text-align:center">
+    <div style="font-size:3rem;margin-bottom:1rem">🎉</div>
+    <h3>Booking Confirmed!</h3>
+    <p style="margin:.5rem 0 1.5rem">Your tickets are secured.</p>
+
+    <div style="background:rgba(108,99,255,.1);border:1px solid rgba(108,99,255,.3);border-radius:12px;padding:1.25rem;margin-bottom:1.5rem">
+      <div style="font-size:.75rem;color:var(--text-muted);margin-bottom:.25rem">Booking Reference</div>
+      <div id="successRef" style="font-size:1.5rem;font-weight:800;font-family:monospace;color:var(--primary-light)"></div>
+    </div>
+
+    <div style="text-align:left;font-size:.875rem">
+      <div style="display:flex;justify-content:space-between;padding:.4rem 0;border-bottom:1px solid var(--border)">
+        <span style="color:var(--text-muted)">Event</span>
+        <span id="successEvent" style="font-weight:600;max-width:60%;text-align:right"></span>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:.4rem 0;border-bottom:1px solid var(--border)">
+        <span style="color:var(--text-muted)">Tickets</span>
+        <span id="successQty" style="font-weight:600"></span>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:.4rem 0">
+        <span style="color:var(--text-muted)">Total Paid</span>
+        <span id="successTotal" style="font-weight:700;color:var(--success)"></span>
+      </div>
+    </div>
+
+    <div class="modal-actions" style="justify-content:center;gap:.75rem;flex-wrap:wrap">
+      <button class="btn btn-primary" id="viewDashboardBtn">View My Tickets</button>
+      <button class="btn btn-outline" id="closeSuccessModal">Stay Here</button>
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'js/api.js' %}"></script>
+<script src="{% static 'js/event.js' %}"></script>
+</body>
+</html>

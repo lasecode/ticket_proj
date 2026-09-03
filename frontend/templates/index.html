@@ -1,0 +1,165 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EventHub — Discover Amazing Events</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎫</text></svg>">
+</head>
+<body>
+
+<!-- ── Navbar ── -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">Event<span>Hub</span><span class="dot">.</span></a>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="/">Home</a></li>
+      <li><a href="/?upcoming=true">Upcoming</a></li>
+      <li><a href="/?category=concert">Concerts</a></li>
+      <li><a href="/?category=technology">Tech</a></li>
+      <li id="navAdminLink" class="hidden"><a href="/admin-dashboard/">Admin</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <a href="/login/" class="btn btn-outline" id="navLoginBtn">Log In</a>
+      <a href="/register/" class="btn btn-primary" id="navRegisterBtn">Sign Up</a>
+
+      <div class="nav-user hidden" id="navUserMenu">
+        <span class="nav-user-name" id="navUserName"></span>
+        <a href="/dashboard/" class="btn btn-outline btn-sm">My Tickets</a>
+        <button class="btn btn-danger btn-sm" id="logoutBtn">Logout</button>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">🎫 Nigeria's #1 Event Platform</div>
+      <h1>Discover <span class="gradient-text">Amazing Events</span> Near You</h1>
+      <p>Find concerts, tech conferences, sports events, and more. Book your tickets in seconds.</p>
+
+      <div class="hero-actions">
+        <a href="#events" class="btn btn-primary btn-lg">Explore Events</a>
+        <a href="/register/" class="btn btn-outline btn-lg">Get Started Free</a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-item"><h3>500+</h3><p>Events Listed</p></div>
+        <div class="stat-item"><h3>50K+</h3><p>Tickets Sold</p></div>
+        <div class="stat-item"><h3>100+</h3><p>Cities</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Search ── -->
+<section class="search-section">
+  <div class="container">
+    <form class="search-bar" id="searchForm">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search events, artists, venues..." autocomplete="off">
+      <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+  </div>
+</section>
+
+<!-- ── Category Filters ── -->
+<section class="categories-section">
+  <div class="container">
+    <div class="categories-list" id="categoryList">
+      <button class="category-btn active" data-category="">All Events</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── Featured Events ── -->
+<section class="section-sm" id="featuredSection">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="section-tag">✨ Featured</div>
+        <h2>Don't Miss These</h2>
+      </div>
+    </div>
+    <div class="events-grid" id="featuredGrid"></div>
+  </div>
+</section>
+
+<!-- ── All Events ── -->
+<section class="section-sm" id="events">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="section-tag">📅 Upcoming</div>
+        <h2>All Events</h2>
+      </div>
+    </div>
+    <div class="events-grid" id="eventsGrid">
+      <!-- loaded by JS -->
+      <div class="skeleton" style="height:300px;border-radius:12px"></div>
+      <div class="skeleton" style="height:300px;border-radius:12px"></div>
+      <div class="skeleton" style="height:300px;border-radius:12px"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="section">
+  <div class="container">
+    <div class="cta-section">
+      <h2>Ready to experience something <span class="gradient-text">unforgettable?</span></h2>
+      <p>Join thousands of event-goers. Create an account and start booking today.</p>
+      <a href="/register/" class="btn btn-primary btn-lg">Create Free Account</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo">Event<span>Hub</span><span class="dot">.</span></div>
+        <p>Nigeria's premier event ticketing platform. Discover, book, and experience amazing events.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <a href="/">All Events</a>
+        <a href="/?category=concert">Concerts</a>
+        <a href="/?category=technology">Tech Events</a>
+        <a href="/?category=sports">Sports</a>
+      </div>
+      <div class="footer-col">
+        <h4>Account</h4>
+        <a href="/login/">Log In</a>
+        <a href="/register/">Sign Up</a>
+        <a href="/dashboard/">My Tickets</a>
+      </div>
+      <div class="footer-col">
+        <h4>Info</h4>
+        <a href="#">About Us</a>
+        <a href="#">Contact</a>
+        <a href="#">Privacy Policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 EventHub. All rights reserved.</span>
+      <span>Built with Django & ❤️</span>
+    </div>
+  </div>
+</footer>
+
+<script src="{% static 'js/api.js' %}"></script>
+<script src="{% static 'js/home.js' %}"></script>
+</body>
+</html>

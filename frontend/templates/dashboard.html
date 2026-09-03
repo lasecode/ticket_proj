@@ -1,0 +1,97 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Tickets | EventHub</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎫</text></svg>">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">Event<span>Hub</span><span class="dot">.</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="/">Browse Events</a></li>
+      <li id="navAdminLink" class="hidden"><a href="/admin-dashboard/">Admin</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="/login/" class="btn btn-outline hidden" id="navLoginBtn">Log In</a>
+      <a href="/register/" class="btn btn-primary hidden" id="navRegisterBtn">Sign Up</a>
+      <div class="nav-user hidden" id="navUserMenu">
+        <span class="nav-user-name" id="navUserName"></span>
+        <button class="btn btn-danger btn-sm" id="logoutBtn">Logout</button>
+      </div>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<main class="dashboard-page">
+  <div class="container">
+
+    <!-- ── Header ── -->
+    <div class="dashboard-header">
+      <div>
+        <h2>My Tickets 🎫</h2>
+        <p>Manage all your event bookings</p>
+      </div>
+      <a href="/" class="btn btn-primary">Browse Events</a>
+    </div>
+
+    <!-- ── Profile Card ── -->
+    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:2rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap">
+      <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;font-size:1.75rem;flex-shrink:0">
+        👤
+      </div>
+      <div style="flex:1;min-width:0">
+        <h3 id="profileName" style="margin-bottom:.25rem">Loading...</h3>
+        <div style="font-size:.875rem;color:var(--text-muted)" id="profileEmail">—</div>
+        <div style="font-size:.8rem;color:var(--text-muted);margin-top:.25rem">📞 <span id="profilePhone">—</span></div>
+      </div>
+      <div style="display:flex;gap:2rem;flex-wrap:wrap">
+        <div style="text-align:center">
+          <div style="font-size:1.5rem;font-weight:800;color:var(--text-primary)" id="profileBookings">—</div>
+          <div style="font-size:.75rem;color:var(--text-muted)">Confirmed Bookings</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:1.5rem;font-weight:800;color:var(--text-primary)" id="upcomingCount">—</div>
+          <div style="font-size:.75rem;color:var(--text-muted)">Upcoming</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Tabs ── -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="upcoming">🗓️ Upcoming</button>
+      <button class="tab-btn" data-tab="past">📁 Past &amp; Cancelled (<span id="pastCount">0</span>)</button>
+    </div>
+
+    <!-- ── Bookings List ── -->
+    <div id="bookingsList">
+      <div class="skeleton" style="height:80px;border-radius:12px;margin-bottom:1rem"></div>
+      <div class="skeleton" style="height:80px;border-radius:12px;margin-bottom:1rem"></div>
+      <div class="skeleton" style="height:80px;border-radius:12px"></div>
+    </div>
+
+  </div>
+</main>
+
+<!-- ── Cancel Confirm Modal ── -->
+<div class="modal-overlay" id="cancelModal">
+  <div class="modal">
+    <h3>Cancel Booking?</h3>
+    <p style="margin-bottom:1rem">Are you sure you want to cancel this booking? Your tickets will be returned to the event and a refund will be processed (in a real scenario).</p>
+    <div class="modal-actions">
+      <button class="btn btn-outline" id="closeCancelModal">Keep Booking</button>
+      <button class="btn btn-danger" id="confirmCancelBtn">Yes, Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'js/api.js' %}"></script>
+<script src="{% static 'js/dashboard.js' %}"></script>
+</body>
+</html>

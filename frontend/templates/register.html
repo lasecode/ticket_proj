@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account | EventHub</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎫</text></svg>">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">Event<span>Hub</span><span class="dot">.</span></a>
+    <div class="nav-actions">
+      <a href="/login/" class="btn btn-outline">Log In</a>
+    </div>
+  </div>
+</nav>
+
+<main class="auth-page">
+  <div class="container">
+    <div class="auth-card" style="max-width:520px">
+      <div style="text-align:center;font-size:2.5rem;margin-bottom:1rem">🎟️</div>
+      <h2>Create Your Account</h2>
+      <p class="subtitle">Join EventHub and start booking amazing events</p>
+
+      <div id="registerAlert" class="alert"></div>
+
+      <form id="registerForm" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">First Name <span style="color:var(--accent)">*</span></label>
+            <input class="form-control" type="text" id="firstName" placeholder="John" required>
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name <span style="color:var(--accent)">*</span></label>
+            <input class="form-control" type="text" id="lastName" placeholder="Doe" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address <span style="color:var(--accent)">*</span></label>
+          <input class="form-control" type="email" id="email" placeholder="you@example.com" required autocomplete="email">
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone Number <span style="color:var(--text-muted)">(optional)</span></label>
+          <input class="form-control" type="tel" id="phone" placeholder="+234 800 000 0000">
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password <span style="color:var(--accent)">*</span></label>
+          <input class="form-control" type="password" id="password" placeholder="At least 8 characters" required autocomplete="new-password">
+        </div>
+
+        <div class="form-group">
+          <label for="password2">Confirm Password <span style="color:var(--accent)">*</span></label>
+          <input class="form-control" type="password" id="password2" placeholder="Repeat your password" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full btn-lg" id="registerBtn" style="margin-top:.5rem">
+          Create Account
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        Already have an account? <a href="/login/">Log in</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="{% static 'js/api.js' %}"></script>
+<script src="{% static 'js/register.js' %}"></script>
+</body>
+</html>
