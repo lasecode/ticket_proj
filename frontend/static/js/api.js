@@ -35,14 +35,18 @@ function isLoggedIn() { return !!getAccessToken(); }
 // ── HTTP Request Helper ───────────────────────────────────────────────────────
 
 async function request(method, endpoint, data = null, requireAuth = false) {
-  const headers = { 'Content-Type': 'application/json' };
+  const headers = {};
+  const isFormData = data instanceof FormData;
+  if (!isFormData) {
+    headers['Content-Type'] = 'application/json';
+  }
 
   if (requireAuth || getAccessToken()) {
     headers['Authorization'] = `Bearer ${getAccessToken()}`;
   }
 
   const options = { method, headers };
-  if (data) options.body = JSON.stringify(data);
+  if (data) options.body = isFormData ? data : JSON.stringify(data);
 
   let response = await fetch(`${API_BASE}${endpoint}`, options);
 

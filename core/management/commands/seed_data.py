@@ -9,6 +9,7 @@ from django.utils import timezone
 from datetime import date, time, timedelta
 from events.models import Event
 from bookings.models import Booking
+from .generate_images import generate_event_image
 
 User = get_user_model()
 
@@ -252,6 +253,10 @@ class Command(BaseCommand):
                 title=data['title'],
                 defaults={**data, 'available_tickets': data['total_tickets']},
             )
+            if not event.image:
+                rel_path = generate_event_image(event)
+                event.image = rel_path
+                event.save(update_fields=['image'])
             if created:
                 created_count += 1
                 self.stdout.write(self.style.SUCCESS(f'  Created: {event.title}'))
